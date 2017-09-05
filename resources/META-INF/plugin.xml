@@ -1,8 +1,8 @@
 <idea-plugin>
-  <id>org.idea.latex.doclet.plugin.LatexDocletPlugin</id>
-  <name>Latex Doclet</name>
+  <id>org.idea.latex.javadoc.plugin.LatexJavadocPlugin</id>
+  <name>Latex Javadoc</name>
   <version>1.0</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+  <vendor email="msafonovmail@gmail.com" url="https://github.com/MikeSafonov/idea-latex-javadoc-plugin">Mike Safonov</vendor>
 
 
   <description><![CDATA[
@@ -16,35 +16,23 @@
     ]]>
   </change-notes>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
   <idea-version since-build="145.0"/>
-
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-       on how to target different products -->
-  <!-- uncomment to enable plugin in all products
-  <depends>com.intellij.modules.lang</depends>
-  -->
 
 
   <application-components>
     <component>
-      <implementation-class>org.idea.latex.doclet.plugin.TempFileManager</implementation-class>
+      <implementation-class>org.idea.latex.javadoc.plugin.TempFileManager</implementation-class>
     </component>
   </application-components>
   <project-components>
     <component>
-      <implementation-class>org.idea.latex.doclet.plugin.ProjectConfiguration</implementation-class>
+      <implementation-class>org.idea.latex.javadoc.plugin.ProjectConfiguration</implementation-class>
     </component>
   </project-components>
-  <module-components>
-    <component>
-      <implementation-class>org.idea.latex.doclet.plugin.ModuleConfiguration</implementation-class>
-    </component>
-  </module-components>
 
   <extensions defaultExtensionNs="com.intellij">
-    <lang.documentationProvider language="JAVA" implementationClass="org.idea.latex.doclet.plugin.LatexDocumentationProvider" order="first"/>
-    <projectConfigurable instance="org.idea.latex.doclet.plugin.LatexConfigurable"
+    <lang.documentationProvider language="JAVA" implementationClass="org.idea.latex.javadoc.plugin.LatexDocumentationProvider" order="first"/>
+    <projectConfigurable instance="org.idea.latex.javadoc.plugin.LatexConfigurable"
                          id="org.idea.latex.doclet.plugin.LatexDocletPlugin.Config" displayName="Latex Doclet" groupId="tools"/>
   </extensions>
 

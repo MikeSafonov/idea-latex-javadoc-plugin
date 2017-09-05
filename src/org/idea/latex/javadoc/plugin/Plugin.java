@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with markdown-doclet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.idea.latex.doclet.plugin;
+package org.idea.latex.javadoc.plugin;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
@@ -26,17 +26,15 @@ import com.intellij.openapi.project.Project;
 /**
  * Some utilities for the plugin.
  *
- * @author <a href="mailto:herzog@raffael.ch">Raffael Herzog</a>
  */
 public final class Plugin {
 
     public static final boolean DEBUG = true;
 
-    public static final String PLUGIN_NAME = "org.idea.latex.doclet.plugin.LatexDocletPlugin";
+    public static final String PLUGIN_NAME = "org.idea.latex.javadoc.plugin.LatexJavadocPlugin";
 
     public static final String TEMP_FILE_MANAGER_NAME = PLUGIN_NAME + ".TempFileManager";
     public static final String PROJECT_CONFIG_NAME = PLUGIN_NAME + ".ProjectConfig";
-    public static final String MODULE_CONFIG_NAME = PLUGIN_NAME + ".ModuleConfig";
 
     private Plugin() {
     }
@@ -46,11 +44,7 @@ public final class Plugin {
     }
 
     public static ProjectConfiguration projectConfiguration(Project project) {
-        return (ProjectConfiguration)project.getComponent(PROJECT_CONFIG_NAME);
-    }
-
-    public static ModuleConfiguration moduleConfiguration(Module module) {
-        return (ModuleConfiguration)module.getComponent(MODULE_CONFIG_NAME);
+        return project.getComponent(ProjectConfiguration.class);
     }
 
     public static void print(String description, String output) {

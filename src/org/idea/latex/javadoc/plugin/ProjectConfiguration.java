@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with markdown-doclet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.idea.latex.doclet.plugin;
+package org.idea.latex.javadoc.plugin;
 
 import com.intellij.openapi.components.*;
 import com.intellij.openapi.project.Project;
@@ -33,12 +33,24 @@ import org.jetbrains.annotations.Nullable;
 @State(name = Plugin.PLUGIN_NAME + ".ProjectConfiguration",
        storages = {
                @Storage(file = StoragePathMacros.PROJECT_FILE),
-               @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/markdown-doclet.xml")
+               @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/latex-javadoc.xml")
        })
 public class ProjectConfiguration implements ProjectComponent {
 
+    private LatexOptions configuration;
 
-    public ProjectConfiguration(Project project) {
+    public ProjectConfiguration() {
+        configuration = new LatexOptions();
+    }
+
+    public synchronized void setConfiguration(LatexOptions configuration) {
+        System.out.println("configuration");
+        this.configuration = new LatexOptions(configuration);
+        Plugin.tempFileManager().cleanup();
+    }
+
+    public synchronized LatexOptions getConfiguration() {
+        return configuration;
     }
 
     public void initComponent() {
@@ -62,17 +74,17 @@ public class ProjectConfiguration implements ProjectComponent {
         // called when project is being closed
     }
 
+    @Nullable
+    public synchronized LatexOptions getState() {
+        return new LatexOptions(configuration);
+    }
 
-//    @Override
-//    public synchronized void loadState(MarkdownOptions state) {
-//        configuration = new MarkdownOptions(state);
-//        if ( configuration.enabled == null ) {
-//            configuration.enabled = false;
-//        }
-//        if ( configuration.renderingOptions == null ) {
-//            configuration.renderingOptions = new MarkdownOptions.RenderingOptions();
-//        }
-//    }
+    public synchronized void loadState(LatexOptions state) {
+        configuration = new LatexOptions(state);
+    }
 
+    public synchronized boolean isLatexJavadocEnabled() {
+        return configuration.getEnable();
+    }
 
 }

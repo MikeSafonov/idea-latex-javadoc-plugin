@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with markdown-doclet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.idea.latex.doclet.plugin;
+package org.idea.latex.javadoc.plugin;
 
 import com.google.common.hash.Hashing;
 import com.google.common.util.concurrent.AbstractScheduledService;
@@ -31,7 +31,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
@@ -40,13 +39,11 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
- * An application component that manages temporary files used to display PlantUML diagrams
+ * An application component that manages temporary files used to display LaTeX formulas
  * in QuickDoc. It saves the content to a file
- * `system/plugins/markdown-doclet/<hash>.<extension>` and deletes that file after it
+ * `system/plugins/latex-javadoc/<hash>.<extension>` and deletes that file after it
  * hasn't been used for a while. Also cleans up the temporary directory on IDE startup
  * and shutdown.
- *
- * @author <a href="mailto:herzog@raffael.ch">Raffael Herzog</a>
  */
 public class TempFileManager implements ApplicationComponent {
 
@@ -96,7 +93,7 @@ public class TempFileManager implements ApplicationComponent {
 
     @Override
     public synchronized void initComponent() {
-        baseDir = new File(PathManager.getPluginTempPath(), "latex-doclet-idea");
+        baseDir = new File(PathManager.getPluginTempPath(), "latex-javadoc");
         cleanup();
         cleanupService.startAsync().awaitRunning();
     }
@@ -116,14 +113,12 @@ public class TempFileManager implements ApplicationComponent {
         URL fileUrl = null;
         synchronized (index) {
 
-            if(tempFile.exists()){
-                System.out.println("file exist!!!");
+            if (tempFile.exists()) {
                 index.put(name, System.currentTimeMillis());
                 fileUrl = tempFile.toURI().toURL();
             }
 
             if (!tempFile.isFile()) {
-                System.out.println("file not exist!!!");
                 fileCreated = ImageIO.write(image, "png", tempFile);
                 if (fileCreated) {
                     index.put(name, System.currentTimeMillis());
@@ -136,11 +131,18 @@ public class TempFileManager implements ApplicationComponent {
         return fileUrl;
     }
 
-    private void cleanup() {
+    void cleanup() {
         if (FileUtil.createDirectory(baseDir)) {
+            System.out.println("deleting all files");
             for (File child : baseDir.listFiles()) {
                 FileUtil.delete(child);
+
             }
+        }
+
+        synchronized (index) {
+            System.out.println("deleting all index");
+            index.clear();
         }
     }
 
