@@ -1,6 +1,7 @@
 package org.idea.latex.javadoc.plugin;
 
 import com.intellij.util.ui.UIUtil;
+import org.jetbrains.annotations.NotNull;
 import org.scilab.forge.jlatexmath.TeXConstants;
 import org.scilab.forge.jlatexmath.TeXFormula;
 import org.scilab.forge.jlatexmath.TeXIcon;
@@ -27,7 +28,7 @@ public class LatexGenerator {
      * @param formula the formula to compile
      * @see TempFileManager#saveTempFile(byte[], BufferedImage, String)
      */
-    public URL generate(String formula, LatexOptions latexOptions) throws IOException {
+    public URL generate(@NotNull String formula,@NotNull LatexOptions latexOptions) throws IOException {
         TeXFormula tf = new TeXFormula(formula);
         TeXIcon ti = tf.createTeXIcon(TeXConstants.STYLE_DISPLAY, latexOptions.getIconSize());
         BufferedImage bimg = UIUtil.createImage(ti.getIconWidth(), ti.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);

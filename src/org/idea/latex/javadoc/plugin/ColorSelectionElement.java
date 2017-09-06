@@ -5,6 +5,8 @@ import com.intellij.ui.JBColor;
 import java.awt.*;
 
 /**
+ * Object for combobox search
+ *
  * @author MikeSafonov
  */
 public enum ColorSelectionElement {

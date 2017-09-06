@@ -44,6 +44,7 @@ public class LatexConfigurable implements Configurable {
 
     @Override
     public void apply() throws ConfigurationException {
+        System.out.println("latconf apply");
         if (configurationForm != null) {
             configurationForm.apply();
         }

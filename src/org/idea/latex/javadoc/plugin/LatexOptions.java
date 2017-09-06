@@ -26,7 +26,7 @@ public class LatexOptions {
     public LatexOptions(LatexOptions configuration) {
         this();
         if (configuration != null) {
-            this.enable = configuration.enable;
+            this.enable = new Boolean(configuration.enable.booleanValue());
             this.iconSize = configuration.iconSize;
             this.backgroundColor = configuration.backgroundColor;
             this.foregroundColor = configuration.foregroundColor;

@@ -27,15 +27,10 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A project component holding the project-wide configuration.
  *
- * @author <a href="mailto:herzog@raffael.ch">Raffael Herzog</a>
  */
-// todo: for IJ 2016: @State(name = Plugin.PLUGIN_NAME + ".ProjectConfiguration", storages=@Storage("markdown-doclet.xml"))
 @State(name = Plugin.PLUGIN_NAME + ".ProjectConfiguration",
-       storages = {
-               @Storage(file = StoragePathMacros.PROJECT_FILE),
-               @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/latex-javadoc.xml")
-       })
-public class ProjectConfiguration implements ProjectComponent {
+        storages = @Storage("latex-javadoc.xml"))
+public class ProjectConfiguration implements ProjectComponent, PersistentStateComponent<LatexOptions> {
 
     private LatexOptions configuration;
 
@@ -44,7 +39,7 @@ public class ProjectConfiguration implements ProjectComponent {
     }
 
     public synchronized void setConfiguration(LatexOptions configuration) {
-        System.out.println("configuration");
+        System.out.println("configuration changed");
         this.configuration = new LatexOptions(configuration);
         Plugin.tempFileManager().cleanup();
     }

@@ -7,6 +7,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 /**
+ * The plugin configuration form.
+ *
  * @author MikeSafonov
  */
 public class LatexConfigurationForm {
@@ -33,6 +35,11 @@ public class LatexConfigurationForm {
         enableCheckBox.addItemListener(e -> {
             synchronized (LatexConfigurationForm.this) {
                 latexOptions.setEnable(enableCheckBox.isSelected());
+
+                Plugin.print("global enable",
+                        Plugin.projectConfiguration(project).getConfiguration().getEnable().toString() );
+                Plugin.print("local enable",
+                        latexOptions.getEnable().toString() );
 
                 setupEnableToComponents(latexOptions.getEnable());
             }
@@ -97,7 +104,8 @@ public class LatexConfigurationForm {
     }
 
     public synchronized void apply() {
-        System.out.println("apply form");
+        Plugin.print("apply form","apply form");
+
         Plugin.projectConfiguration(project).setConfiguration(latexOptions);
     }
 

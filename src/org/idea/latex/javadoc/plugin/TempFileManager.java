@@ -106,10 +106,9 @@ public class TempFileManager implements ApplicationComponent {
 
 
     public synchronized URL saveTempFile(byte[] formulaBytes, BufferedImage image, String extension) throws IOException {
+
         String name = Hashing.sha1().hashBytes(formulaBytes).toString();
-        System.out.println(name);
         File tempFile = new File(baseDir, name + "." + extension);
-        boolean fileCreated = false;
         URL fileUrl = null;
         synchronized (index) {
 
@@ -119,7 +118,7 @@ public class TempFileManager implements ApplicationComponent {
             }
 
             if (!tempFile.isFile()) {
-                fileCreated = ImageIO.write(image, "png", tempFile);
+                boolean fileCreated = ImageIO.write(image, "png", tempFile);
                 if (fileCreated) {
                     index.put(name, System.currentTimeMillis());
                     fileUrl = tempFile.toURI().toURL();
@@ -132,6 +131,8 @@ public class TempFileManager implements ApplicationComponent {
     }
 
     void cleanup() {
+
+        System.out.println("cleanup");
         if (FileUtil.createDirectory(baseDir)) {
             System.out.println("deleting all files");
             for (File child : baseDir.listFiles()) {
