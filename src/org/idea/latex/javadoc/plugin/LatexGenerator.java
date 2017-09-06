@@ -34,10 +34,10 @@ public class LatexGenerator {
         BufferedImage bimg = UIUtil.createImage(ti.getIconWidth(), ti.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 
         Graphics2D g2d = bimg.createGraphics();
-        g2d.setColor(latexOptions.getBackgroundColor().getColor());
+        g2d.setColor(latexOptions.getBackgroundColor());
         g2d.fillRect(0, 0, ti.getIconWidth(), ti.getIconHeight());
         JLabel jl = new JLabel();
-        jl.setForeground(latexOptions.getForegroundColor().getColor());
+        jl.setForeground(latexOptions.getForegroundColor());
         ti.paintIcon(jl, g2d, 0, 0);
 
         return Plugin.tempFileManager().saveTempFile(formula.getBytes(), bimg, "png");

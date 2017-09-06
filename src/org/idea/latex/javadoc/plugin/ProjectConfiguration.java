@@ -28,19 +28,20 @@ import org.jetbrains.annotations.Nullable;
  * A project component holding the project-wide configuration.
  *
  */
-@State(name = Plugin.PLUGIN_NAME + ".ProjectConfiguration",
-        storages = @Storage("latex-javadoc.xml"))
-public class ProjectConfiguration implements ProjectComponent, PersistentStateComponent<LatexOptions> {
+//@State(name = Plugin.PLUGIN_NAME + ".ProjectConfiguration",
+//        storages = @Storage("latex-javadoc.xml"))
+@Deprecated
+public class ProjectConfiguration  {
 
     private LatexOptions configuration;
 
-    public ProjectConfiguration() {
-        configuration = new LatexOptions();
-    }
+//    public ProjectConfiguration() {
+//        configuration = new LatexOptions();
+//    }
 
     public synchronized void setConfiguration(LatexOptions configuration) {
         System.out.println("configuration changed");
-        this.configuration = new LatexOptions(configuration);
+//        this.configuration = new LatexOptions(configuration);
         Plugin.tempFileManager().cleanup();
     }
 
@@ -71,11 +72,12 @@ public class ProjectConfiguration implements ProjectComponent, PersistentStateCo
 
     @Nullable
     public synchronized LatexOptions getState() {
-        return new LatexOptions(configuration);
+        return null;
+//        new LatexOptions(configuration);
     }
 
     public synchronized void loadState(LatexOptions state) {
-        configuration = new LatexOptions(state);
+//        configuration = new LatexOptions(state);
     }
 
     public synchronized boolean isLatexJavadocEnabled() {

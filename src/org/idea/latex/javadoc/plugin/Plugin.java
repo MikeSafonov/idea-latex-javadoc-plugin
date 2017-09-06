@@ -43,15 +43,5 @@ public final class Plugin {
         return ApplicationManager.getApplication().getComponent(TempFileManager.class);
     }
 
-    public static ProjectConfiguration projectConfiguration(Project project) {
-        return project.getComponent(ProjectConfiguration.class);
-    }
-
-    public static void print(String description, String output) {
-        if ( DEBUG ) {
-            System.out.println("\n\n\n*** " + description + "\n");
-            System.out.println(output);
-        }
-    }
 
 }

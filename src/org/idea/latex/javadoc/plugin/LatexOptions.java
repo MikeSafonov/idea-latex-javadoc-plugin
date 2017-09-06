@@ -1,6 +1,11 @@
 package org.idea.latex.javadoc.plugin;
 
+import com.intellij.openapi.components.*;
 import com.intellij.ui.JBColor;
+import com.intellij.util.xmlb.XmlSerializerUtil;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
@@ -9,28 +14,23 @@ import java.awt.*;
  *
  * @author MikeSafonov
  */
-public class LatexOptions {
+@State(name = "LatexOptions", storages = {@Storage("latex-javadoc.cfg")})
+public class LatexOptions implements PersistentStateComponent<LatexOptions> {
 
-    private Boolean enable;
+    private boolean enable;
     private int iconSize;
-    private ColorSelectionElement backgroundColor;
-    private ColorSelectionElement foregroundColor;
+    private Color backgroundColor;
+    private Color foregroundColor;
 
-    public LatexOptions() {
-        enable = false;
-        iconSize = 20;
-        backgroundColor = ColorSelectionElement.WHITE;
-        foregroundColor = ColorSelectionElement.BLACK;
+    public static LatexOptions getInstance() {
+        return ServiceManager.getService(LatexOptions.class);
     }
 
-    public LatexOptions(LatexOptions configuration) {
-        this();
-        if (configuration != null) {
-            this.enable = new Boolean(configuration.enable.booleanValue());
-            this.iconSize = configuration.iconSize;
-            this.backgroundColor = configuration.backgroundColor;
-            this.foregroundColor = configuration.foregroundColor;
-        }
+    private LatexOptions() {
+        enable = false;
+        iconSize = 20;
+        backgroundColor = JBColor.WHITE;
+        foregroundColor = JBColor.BLACK;
     }
 
     public void setEnable(Boolean enable) {
@@ -41,11 +41,11 @@ public class LatexOptions {
         this.iconSize = iconSize;
     }
 
-    public void setBackgroundColor(ColorSelectionElement backgroundColor) {
+    public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 
-    public void setForegroundColor(ColorSelectionElement foregroundColor) {
+    public void setForegroundColor(Color foregroundColor) {
         this.foregroundColor = foregroundColor;
     }
 
@@ -57,11 +57,33 @@ public class LatexOptions {
         return iconSize;
     }
 
-    public ColorSelectionElement getBackgroundColor() {
+    public Color getBackgroundColor() {
         return backgroundColor;
     }
 
-    public ColorSelectionElement getForegroundColor() {
+    public Color getForegroundColor() {
         return foregroundColor;
+    }
+
+    @Nullable
+    @Override
+    public LatexOptions getState() {
+        return this;
+    }
+
+    @Override
+    public void loadState(LatexOptions state) {
+
+        XmlSerializerUtil.copyBean(state, this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(o, this);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

@@ -9,6 +9,7 @@ import java.awt.*;
  *
  * @author MikeSafonov
  */
+@Deprecated
 public enum ColorSelectionElement {
 
 

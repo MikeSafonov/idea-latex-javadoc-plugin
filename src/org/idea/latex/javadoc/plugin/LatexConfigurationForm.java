@@ -1,80 +1,52 @@
 package org.idea.latex.javadoc.plugin;
 
-import com.intellij.openapi.project.Project;
+import com.intellij.openapi.options.Configurable;
+import com.intellij.util.ui.UIUtil;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * The plugin configuration form.
  *
  * @author MikeSafonov
  */
-public class LatexConfigurationForm {
+public class LatexConfigurationForm implements Configurable {
 
 
-    private final Project project;
     private JPanel root;
     private JTextField fontSizeTextField;
-    private JComboBox backgroundColorComboBox;
-    private JComboBox foregroundColorComboBox;
     private JCheckBox enableCheckBox;
-    private LatexOptions latexOptions;
+    private JButton foregroundColorChoose;
+    private JButton backgroundColorChoose;
+
+    private int previousFontValue;
+    private Color foregroundColor;
+    private Color backgroundColor;
 
 
-    public LatexConfigurationForm(final Project project) {
-        this.project = project;
-        this.latexOptions = Plugin.projectConfiguration(project).getState();
+    public LatexConfigurationForm() {
 
-        if (latexOptions == null) {
-            latexOptions = new LatexOptions();
-        }
-
-        enableCheckBox.setSelected(latexOptions.getEnable());
+        enableCheckBox.setSelected(LatexOptions.getInstance().getEnable());
         enableCheckBox.addItemListener(e -> {
             synchronized (LatexConfigurationForm.this) {
-                latexOptions.setEnable(enableCheckBox.isSelected());
 
-                Plugin.print("global enable",
-                        Plugin.projectConfiguration(project).getConfiguration().getEnable().toString() );
-                Plugin.print("local enable",
-                        latexOptions.getEnable().toString() );
-
-                setupEnableToComponents(latexOptions.getEnable());
+                setupEnableToComponents(enableCheckBox.isSelected());
             }
         });
 
-        for (ColorSelectionElement element : ColorSelectionElement.values()) {
-            backgroundColorComboBox.addItem(element);
-        }
-        backgroundColorComboBox.setSelectedItem(latexOptions.getBackgroundColor());
-        backgroundColorComboBox.addItemListener(e -> {
-            synchronized (LatexConfigurationForm.this) {
-                latexOptions.setBackgroundColor((ColorSelectionElement) backgroundColorComboBox.getSelectedItem());
-            }
-        });
-
-        for (ColorSelectionElement element : ColorSelectionElement.values()) {
-            foregroundColorComboBox.addItem(element);
-        }
-        foregroundColorComboBox.setSelectedItem(latexOptions.getForegroundColor());
-        foregroundColorComboBox.addItemListener(e -> {
-            synchronized (LatexConfigurationForm.this) {
-                latexOptions.setForegroundColor((ColorSelectionElement) foregroundColorComboBox.getSelectedItem());
-            }
-        });
-
-        fontSizeTextField.setText(latexOptions.getIconSize() + "");
+        fontSizeTextField.setText(LatexOptions.getInstance().getIconSize() + "");
         fontSizeTextField.setInputVerifier(new InputVerifier() {
             @Override
             public boolean verify(JComponent input) {
                 String textValue = ((JTextField) input).getText();
                 try {
                     Integer intValue = Integer.parseInt(textValue);
-                    synchronized (LatexConfigurationForm.this) {
-                        latexOptions.setIconSize(intValue);
-                    }
+                    previousFontValue = intValue;
                     return true;
                 } catch (NumberFormatException ex) {
                     return false;
@@ -82,35 +54,83 @@ public class LatexConfigurationForm {
             }
         });
 
-        setupEnableToComponents(latexOptions.getEnable());
 
+        foregroundColorChoose.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Color color = UIUtil.getTreeBackground();
+                if (color != null) {
+                    foregroundColor = color;
+                }
+            }
+        });
+
+        backgroundColorChoose.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Color color = UIUtil.getTreeBackground();
+                if (color != null) {
+                    backgroundColor = color;
+                }
+            }
+        });
+
+
+        setupData(LatexOptions.getInstance());
     }
 
 
     private void setupEnableToComponents(boolean enable) {
-        backgroundColorComboBox.setEnabled(enable);
-        foregroundColorComboBox.setEnabled(enable);
+        foregroundColorChoose.setEnabled(enable);
+        backgroundColorChoose.setEnabled(enable);
         fontSizeTextField.setEnabled(enable);
     }
 
-
-    public JPanel getRoot() {
+    @Nullable
+    @Override
+    public JComponent createComponent() {
         return root;
     }
 
-
+    @Override
     public synchronized boolean isModified() {
-        return !Plugin.projectConfiguration(project).getConfiguration().equals(latexOptions);
+        return LatexOptions.getInstance().getEnable() != enableCheckBox.isSelected() ||
+                !LatexOptions.getInstance().getBackgroundColor().equals(backgroundColor) ||
+                !LatexOptions.getInstance().getForegroundColor().equals(foregroundColor) ||
+                LatexOptions.getInstance().getIconSize() != previousFontValue;
     }
 
+    @Override
     public synchronized void apply() {
-        Plugin.print("apply form","apply form");
-
-        Plugin.projectConfiguration(project).setConfiguration(latexOptions);
+        LatexOptions.getInstance().setIconSize(previousFontValue);
+        LatexOptions.getInstance().setEnable(enableCheckBox.isSelected());
+        LatexOptions.getInstance().setBackgroundColor(backgroundColor);
+        LatexOptions.getInstance().setForegroundColor(foregroundColor);
     }
 
+    @Override
     public synchronized void reset() {
-        latexOptions = Plugin.projectConfiguration(project).getConfiguration();
+
+        setupData(LatexOptions.getInstance());
+    }
+
+    private void setupData(LatexOptions latexOptions) {
+
+        enableCheckBox.setSelected(latexOptions.getEnable());
+        fontSizeTextField.setText(latexOptions.getIconSize() + "");
+
+        setupEnableToComponents(latexOptions.getEnable());
+
+        previousFontValue = LatexOptions.getInstance().getIconSize();
+        foregroundColor = LatexOptions.getInstance().getForegroundColor();
+        backgroundColor = LatexOptions.getInstance().getBackgroundColor();
+
+    }
+
+    @Nls
+    @Override
+    public String getDisplayName() {
+        return "LaTeX Javadoc";
     }
 
 }

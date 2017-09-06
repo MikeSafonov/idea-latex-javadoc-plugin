@@ -45,7 +45,7 @@ public class LatexJavadocPostProcessor {
     LatexJavadocPostProcessor(PsiElement element) {
 
         this.project = element.getProject();
-        if (Plugin.projectConfiguration(project).isLatexJavadocEnabled()) {
+        if (LatexOptions.getInstance().getEnable()) {
             latexGenerator = new LatexGenerator();
             regexpPatter = Pattern.compile(LATEX_REGXP);
         } else {
@@ -132,7 +132,7 @@ public class LatexJavadocPostProcessor {
 
         String newText = originalText;
         try {
-            URL generatedImage = latexGenerator.generate(formula, Plugin.projectConfiguration(project).getConfiguration());
+            URL generatedImage = latexGenerator.generate(formula, LatexOptions.getInstance());
 
             if (generatedImage == null) {
                 return originalText;
