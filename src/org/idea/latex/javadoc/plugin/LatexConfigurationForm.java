@@ -1,14 +1,15 @@
 package org.idea.latex.javadoc.plugin;
 
 import com.intellij.openapi.options.Configurable;
-import com.intellij.util.ui.UIUtil;
+import com.intellij.ui.ColorChooserService;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Collections;
 
 /**
  * The plugin configuration form.
@@ -21,8 +22,8 @@ public class LatexConfigurationForm implements Configurable {
     private JPanel root;
     private JTextField fontSizeTextField;
     private JCheckBox enableCheckBox;
-    private JButton foregroundColorChoose;
-    private JButton backgroundColorChoose;
+    private JLabel foregroundColorChoose;
+    private JLabel backgroundColorChoose;
 
     private int previousFontValue;
     private Color foregroundColor;
@@ -31,7 +32,6 @@ public class LatexConfigurationForm implements Configurable {
 
     public LatexConfigurationForm() {
 
-        enableCheckBox.setSelected(LatexOptions.getInstance().getEnable());
         enableCheckBox.addItemListener(e -> {
             synchronized (LatexConfigurationForm.this) {
 
@@ -39,7 +39,6 @@ public class LatexConfigurationForm implements Configurable {
             }
         });
 
-        fontSizeTextField.setText(LatexOptions.getInstance().getIconSize() + "");
         fontSizeTextField.setInputVerifier(new InputVerifier() {
             @Override
             public boolean verify(JComponent input) {
@@ -55,28 +54,31 @@ public class LatexConfigurationForm implements Configurable {
         });
 
 
-        foregroundColorChoose.addActionListener(new ActionListener() {
+        foregroundColorChoose.addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                Color color = UIUtil.getTreeBackground();
+            public void mouseClicked(MouseEvent e) {
+                Color color = ColorChooserService.getInstance().showDialog(foregroundColorChoose, "Choose foreground color", backgroundColor, false, Collections.emptyList(), false);
                 if (color != null) {
                     foregroundColor = color;
+                    setupChooser(foregroundColorChoose, color);
                 }
             }
         });
 
-        backgroundColorChoose.addActionListener(new ActionListener() {
+        backgroundColorChoose.addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                Color color = UIUtil.getTreeBackground();
+            public void mouseClicked(MouseEvent e) {
+                Color color = ColorChooserService.getInstance().showDialog(backgroundColorChoose, "Choose background color", backgroundColor, false, Collections.emptyList(), false);
                 if (color != null) {
                     backgroundColor = color;
+                    setupChooser(backgroundColorChoose, color);
                 }
             }
         });
 
-
         setupData(LatexOptions.getInstance());
+
+
     }
 
 
@@ -114,6 +116,13 @@ public class LatexConfigurationForm implements Configurable {
         setupData(LatexOptions.getInstance());
     }
 
+    private void setupChooser(JLabel chooser, Color color) {
+
+        chooser.setBackground(color);
+        chooser.setText(colorToHex(color));
+    }
+
+
     private void setupData(LatexOptions latexOptions) {
 
         enableCheckBox.setSelected(latexOptions.getEnable());
@@ -125,6 +134,14 @@ public class LatexConfigurationForm implements Configurable {
         foregroundColor = LatexOptions.getInstance().getForegroundColor();
         backgroundColor = LatexOptions.getInstance().getBackgroundColor();
 
+        setupChooser(foregroundColorChoose, foregroundColor);
+        setupChooser(backgroundColorChoose, backgroundColor);
+
+    }
+
+
+    private String colorToHex(Color color) {
+        return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()).toUpperCase();
     }
 
     @Nls

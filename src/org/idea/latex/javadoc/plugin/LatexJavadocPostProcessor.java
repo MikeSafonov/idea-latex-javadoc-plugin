@@ -1,21 +1,3 @@
-/*
- * Copyright 2013 Raffael Herzog
- *
- * This file is part of markdown-doclet.
- *
- * markdown-doclet is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * markdown-doclet is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with markdown-doclet.  If not, see <http://www.gnu.org/licenses/>.
- */
 package org.idea.latex.javadoc.plugin;
 
 import com.intellij.openapi.project.Project;
@@ -78,7 +60,6 @@ public class LatexJavadocPostProcessor {
 
         List<String> latexParts = findLatexParts(originalHtml);
 
-        System.out.println("find " + latexParts.size() + " formulas");
         for (String part : latexParts) {
 
             originalHtml = processLatexFormula(part, originalHtml);

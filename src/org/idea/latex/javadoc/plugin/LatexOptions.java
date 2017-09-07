@@ -14,7 +14,8 @@ import java.awt.*;
  *
  * @author MikeSafonov
  */
-@State(name = "LatexOptions", storages = {@Storage("latex-javadoc.cfg")})
+@State(name = "LatexOptions",
+        storages = @Storage(id = "main", file = "$APP_CONFIG$/latex-javadoc.xml"))
 public class LatexOptions implements PersistentStateComponent<LatexOptions> {
 
     private boolean enable;

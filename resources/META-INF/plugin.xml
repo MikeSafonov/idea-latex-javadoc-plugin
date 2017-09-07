@@ -1,44 +1,52 @@
 <idea-plugin>
-  <id>org.idea.latex.javadoc.plugin.LatexJavadocPlugin</id>
-  <name>Latex Javadoc</name>
-  <version>1.0</version>
-  <vendor email="msafonovmail@gmail.com" url="https://github.com/MikeSafonov/idea-latex-javadoc-plugin">Mike Safonov</vendor>
+    <id>org.idea.latex.javadoc.plugin.LatexJavadocPlugin</id>
+    <name>Latex Javadoc</name>
+    <version>1.0</version>
+    <vendor email="msafonovmail@gmail.com" url="https://github.com/MikeSafonov/idea-latex-javadoc-plugin">Mike Safonov
+    </vendor>
 
 
-  <description><![CDATA[
+    <description><![CDATA[
       Enter short description for your plugin here.<br>
       <em>most HTML tags may be used</em>
     ]]></description>
 
-  <change-notes><![CDATA[
+    <change-notes><![CDATA[
       Add change notes here.<br>
       <em>most HTML tags may be used</em>
     ]]>
-  </change-notes>
+    </change-notes>
 
-  <idea-version since-build="145.0"/>
-
-
-  <application-components>
-    <component>
-      <implementation-class>org.idea.latex.javadoc.plugin.TempFileManager</implementation-class>
-    </component>
-  </application-components>
-  <project-components>
-    <component>
-      <implementation-class>org.idea.latex.javadoc.plugin.ProjectConfiguration</implementation-class>
-    </component>
-  </project-components>
-
-  <extensions defaultExtensionNs="com.intellij">
-    <lang.documentationProvider language="JAVA" implementationClass="org.idea.latex.javadoc.plugin.LatexDocumentationProvider" order="first"/>
-    <projectConfigurable instance="org.idea.latex.javadoc.plugin.LatexConfigurable"
-                         id="org.idea.latex.doclet.plugin.LatexDocletPlugin.Config" displayName="Latex Doclet" groupId="tools"/>
-  </extensions>
+    <idea-version since-build="145.0"/>
 
 
-  <actions>
-    <!-- Add your actions here -->
-  </actions>
+    <application-components>
+        <component>
+            <implementation-class>org.idea.latex.javadoc.plugin.TempFileManager</implementation-class>
+        </component>
+        <component>
+            <implementation-class>org.idea.latex.javadoc.plugin.LatexConfigurationForm</implementation-class>
+        </component>
+    </application-components>
+    <!--<project-components>-->
+        <!--<component>-->
+            <!--<implementation-class>org.idea.latex.javadoc.plugin.LatexConfigurationForm</implementation-class>-->
+        <!--</component>-->
+    <!--</project-components>-->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <lang.documentationProvider language="JAVA"
+                                    implementationClass="org.idea.latex.javadoc.plugin.LatexDocumentationProvider"
+                                    order="first"/>
+        <applicationConfigurable instance="org.idea.latex.javadoc.plugin.LatexConfigurationForm"/>
+
+        <applicationService serviceInterface="org.idea.latex.javadoc.plugin.LatexOptions"
+                            serviceImplementation="org.idea.latex.javadoc.plugin.LatexOptions"/>
+    </extensions>
+
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
 
 </idea-plugin>
