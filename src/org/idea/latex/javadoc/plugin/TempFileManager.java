@@ -114,9 +114,7 @@ public class TempFileManager implements ApplicationComponent {
 
     void cleanup() {
 
-        System.out.println("cleanup");
         if (FileUtil.createDirectory(baseDir)) {
-            System.out.println("deleting all files");
             for (File child : baseDir.listFiles()) {
                 FileUtil.delete(child);
 
@@ -124,7 +122,6 @@ public class TempFileManager implements ApplicationComponent {
         }
 
         synchronized (index) {
-            System.out.println("deleting all index");
             index.clear();
         }
     }

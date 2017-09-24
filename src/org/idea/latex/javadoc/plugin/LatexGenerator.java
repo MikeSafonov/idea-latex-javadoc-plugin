@@ -28,7 +28,7 @@ public class LatexGenerator {
      * @param formula the formula to compile
      * @see TempFileManager#saveTempFile(byte[], BufferedImage, String)
      */
-    public URL generate(@NotNull String formula,@NotNull LatexOptions latexOptions) throws IOException {
+    public URL generate(@NotNull String formula, @NotNull LatexOptions latexOptions) throws IOException {
         TeXFormula tf = new TeXFormula(formula);
         TeXIcon ti = tf.createTeXIcon(TeXConstants.STYLE_DISPLAY, latexOptions.getIconSize());
         BufferedImage bimg = UIUtil.createImage(ti.getIconWidth(), ti.getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR);

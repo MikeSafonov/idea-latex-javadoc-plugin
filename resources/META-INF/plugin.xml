@@ -29,16 +29,17 @@
         </component>
     </application-components>
     <!--<project-components>-->
-        <!--<component>-->
-            <!--<implementation-class>org.idea.latex.javadoc.plugin.LatexConfigurationForm</implementation-class>-->
-        <!--</component>-->
+    <!--<component>-->
+    <!--<implementation-class>org.idea.latex.javadoc.plugin.LatexConfigurationForm</implementation-class>-->
+    <!--</component>-->
     <!--</project-components>-->
 
     <extensions defaultExtensionNs="com.intellij">
         <lang.documentationProvider language="JAVA"
                                     implementationClass="org.idea.latex.javadoc.plugin.LatexDocumentationProvider"
                                     order="first"/>
-        <applicationConfigurable instance="org.idea.latex.javadoc.plugin.LatexConfigurationForm"/>
+
+        <applicationConfigurable groupId="editor" instance="org.idea.latex.javadoc.plugin.LatexConfigurationForm"/>
 
         <applicationService serviceInterface="org.idea.latex.javadoc.plugin.LatexOptions"
                             serviceImplementation="org.idea.latex.javadoc.plugin.LatexOptions"/>

@@ -15,7 +15,7 @@ import java.awt.*;
  * @author MikeSafonov
  */
 @State(name = "LatexOptions",
-        storages = @Storage(id = "main", file = "$APP_CONFIG$/latex-javadoc.xml"))
+        storages = @Storage(id = "other", file = "$APP_CONFIG$/latex-javadoc.xml"))
 public class LatexOptions implements PersistentStateComponent<LatexOptions> {
 
     private boolean enable;
@@ -74,7 +74,6 @@ public class LatexOptions implements PersistentStateComponent<LatexOptions> {
 
     @Override
     public void loadState(LatexOptions state) {
-
         XmlSerializerUtil.copyBean(state, this);
     }
 

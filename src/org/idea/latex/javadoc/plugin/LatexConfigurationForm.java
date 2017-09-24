@@ -45,6 +45,9 @@ public class LatexConfigurationForm implements Configurable {
                 String textValue = ((JTextField) input).getText();
                 try {
                     Integer intValue = Integer.parseInt(textValue);
+                    if(intValue <= 0){
+                        return false;
+                    }
                     previousFontValue = intValue;
                     return true;
                 } catch (NumberFormatException ex) {
@@ -57,10 +60,14 @@ public class LatexConfigurationForm implements Configurable {
         foregroundColorChoose.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Color color = ColorChooserService.getInstance().showDialog(foregroundColorChoose, "Choose foreground color", backgroundColor, false, Collections.emptyList(), false);
-                if (color != null) {
-                    foregroundColor = color;
-                    setupChooser(foregroundColorChoose, color);
+                if (enableCheckBox.isSelected()) {
+                    Color color = ColorChooserService.getInstance()
+                            .showDialog(foregroundColorChoose, "Choose foreground color", foregroundColor,
+                                    false, Collections.emptyList(), false);
+                    if (color != null) {
+                        foregroundColor = color;
+                        setupChooser(foregroundColorChoose, color);
+                    }
                 }
             }
         });
@@ -68,10 +75,14 @@ public class LatexConfigurationForm implements Configurable {
         backgroundColorChoose.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Color color = ColorChooserService.getInstance().showDialog(backgroundColorChoose, "Choose background color", backgroundColor, false, Collections.emptyList(), false);
-                if (color != null) {
-                    backgroundColor = color;
-                    setupChooser(backgroundColorChoose, color);
+                if (enableCheckBox.isSelected()) {
+                    Color color = ColorChooserService.getInstance().
+                            showDialog(backgroundColorChoose, "Choose background color", backgroundColor,
+                                    false, Collections.emptyList(), false);
+                    if (color != null) {
+                        backgroundColor = color;
+                        setupChooser(backgroundColorChoose, color);
+                    }
                 }
             }
         });
@@ -108,6 +119,7 @@ public class LatexConfigurationForm implements Configurable {
         LatexOptions.getInstance().setEnable(enableCheckBox.isSelected());
         LatexOptions.getInstance().setBackgroundColor(backgroundColor);
         LatexOptions.getInstance().setForegroundColor(foregroundColor);
+        Plugin.tempFileManager().cleanup();
     }
 
     @Override
